@@ -1,11 +1,11 @@
 <template>
   <div>    
-    <form id="userLoginForm" novalidate class="md-layout align-to-center-form" @submit.prevent="validateUser"
+    <form id="userLoginForm" novalidate class="md-layout align-to-center" @submit.prevent="validateUser"
       action=""
       method="post">
       <md-card class="md-layout-item md-size-30 md-small-size-100">
         <md-card-header >
-          <img class="align-to-center" src="./assets/newLogo256.png">
+          <img class="align-to-center-image" src="./assets/newLogo256.png">
         </md-card-header>
         <md-card-content>
           <md-field :class="getValidationClass('email')">
@@ -20,11 +20,13 @@
             <span class="md-error" v-if="!$v.form.password.required">The password is required</span>
           </md-field>
         </md-card-content>
-        <md-card-actions>
-          <md-button class="md-raised md-accent" @click="goToUserRegister">Sign in</md-button>
+        <md-card-actions class="align-to-center">
           <!-- <md-button type="submit" class="md-raised md-primary" :disabled="sending">Login</md-button> -->
-          <md-button class="md-raised md-primary" @click="goToCalendar">Login</md-button>
-          <router-view/>
+          <md-button class="md-raised md-primary  login_page_buttons" @click="goToCalendar">Sign in</md-button>
+        </md-card-actions>
+        <md-card-actions class="align-to-center">
+          <md-button class="md-raised md-accent  login_page_button_sign_up" @click="goToUserRegister">Sign up</md-button>
+        <router-view/>
         </md-card-actions>
       </md-card>
     </form>
@@ -109,12 +111,23 @@ import { validationMixin } from 'vuelidate'
   small {
     display: block;
   }
-  .align-to-center{
+  .align-to-center-image{
     float: none;
   }
 
-.align-to-center-form{
-  display: flex;
-  justify-content: center;
-}
+  .align-to-center{
+    display: flex;
+    justify-content: center;
+  }
+
+  .login_page_buttons{
+    width: 250px;
+    border-radius: 20px;
+  }
+
+  .login_page_button_sign_up {
+    width: 250px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
 </style>
