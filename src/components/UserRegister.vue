@@ -1,6 +1,6 @@
 <template>
   <div id="UserRegister">
-    <form id="userRegisterForm" novalidate class="md-layout align-to-center-form" @submit.prevent="validateUser"
+    <form id="userRegisterForm" novalidate class="md-layout align-to-center" @submit.prevent="validateUser"
         action=""
         method="post">
         <md-card class="md-layout-item md-size-50 md-small-size-100">
@@ -95,9 +95,9 @@
 
             <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
-            <md-card-actions>
-                <md-button class="md-raised md-accent" @click="goToLoginPage">Back to login</md-button>
-                <md-button type="submit" class="md-raised md-primary" :disabled="sending">Create user</md-button>
+            <md-card-actions class="align-to-center">
+                <md-button class="md-raised md-accent register_page_buttons" @click="goToLoginPage">Back to login</md-button>
+                <md-button type="submit" class="md-raised md-primary register_page_buttons" :disabled="sending">Create user</md-button>
                 <router-view/>
             </md-card-actions>
         </md-card>
@@ -220,14 +220,18 @@
     right: 0;
     left: 0;
   }
-  .align-to-center-form{
+  .align-to-center{
     display: flex;
     justify-content: center;
   }
   .align-to-center-text{
     text-align: center;
   }
-  .md-radio {
-    display: flex;
+
+  .register_page_buttons{
+    width: 250px;
+    border-radius: 20px;
+    margin-bottom: 10px;
   }
+
 </style>
