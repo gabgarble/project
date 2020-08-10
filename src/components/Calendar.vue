@@ -16,23 +16,23 @@
 
             <md-list>
                 <md-list-item>
-                <md-icon>move_to_inbox</md-icon>
-                <span class="md-list-item-text">Inbox</span>
+                <md-icon>get_app</md-icon>
+                <span class="md-list-item-text">Import calendar</span>
                 </md-list-item>
 
                 <md-list-item>
-                <md-icon>send</md-icon>
-                <span class="md-list-item-text">Sent Mail</span>
+                <md-icon>person_add</md-icon>
+                <span class="md-list-item-text">Add users</span>
                 </md-list-item>
 
                 <md-list-item>
-                <md-icon>delete</md-icon>
-                <span class="md-list-item-text">Trash</span>
+                <md-icon>calendar_view_day</md-icon>
+                <span class="md-list-item-text">Change view</span>
                 </md-list-item>
 
                 <md-list-item>
-                <md-icon>error</md-icon>
-                <span class="md-list-item-text">Spam</span>
+                <md-icon>settings</md-icon>
+                <span class="md-list-item-text">Settings</span>
                 </md-list-item>
             </md-list>
         </md-drawer>
