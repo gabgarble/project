@@ -87,7 +87,7 @@
                       <label for="repeatPassword">Repeat password</label>
                       <md-input v-model="form.repeatPassword" :disabled="sending" type="password" name="repeatPassword" id="repeatPassword"></md-input>
                       <span class="md-error" v-if="!$v.form.repeatPassword.required">The repeat password is required</span>
-                      <span class="md-error" v-if="!$v.form.repeatPassword.sameAsPassword">Passwords must be identical</span>
+                      <span class="md-error" v-else-if="!$v.form.repeatPassword.sameAsPassword">Passwords must be identical</span>
                     </md-field>
                   </div>
               </div>
