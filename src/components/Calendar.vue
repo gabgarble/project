@@ -1,6 +1,42 @@
 <template>
   <div id="calendar" class="align-to-center-form">
     <b-container>
+
+        <md-toolbar class="md-primary">
+            <md-button class="md-icon-button" @click="showNavigation = true">
+                <md-icon>menu</md-icon>
+            </md-button>
+            <span class="md-title">My Title</span>
+        </md-toolbar>
+
+        <md-drawer :md-active.sync="showNavigation" md-swipeable>
+            <md-toolbar class="md-transparent" md-elevation="0">
+                <span class="md-title">My App name</span>
+            </md-toolbar>
+
+            <md-list>
+                <md-list-item>
+                <md-icon>move_to_inbox</md-icon>
+                <span class="md-list-item-text">Inbox</span>
+                </md-list-item>
+
+                <md-list-item>
+                <md-icon>send</md-icon>
+                <span class="md-list-item-text">Sent Mail</span>
+                </md-list-item>
+
+                <md-list-item>
+                <md-icon>delete</md-icon>
+                <span class="md-list-item-text">Trash</span>
+                </md-list-item>
+
+                <md-list-item>
+                <md-icon>error</md-icon>
+                <span class="md-list-item-text">Spam</span>
+                </md-list-item>
+            </md-list>
+        </md-drawer>
+
             <main class="b-calendar">
                 <b-row>
                     <b-col md="4">
@@ -15,9 +51,7 @@
                                 <div class="month">
                                     {{selectedDayAndMonth.month | capitalize}}
                                 </div>
-                                <a href="#" id="goTodayLink" @click="goToday" v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">
-                                    Today
-                                </a>
+                                <md-button class="md-raised md-primary changing_button" id="goTodayLink" @click="goToday" v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">Today</md-button>
                                 <b-tooltip target="goTodayLink" v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">
                                     Back to today
                                 </b-tooltip>
@@ -94,6 +128,8 @@
         dateContext: moment(),
         selectedDate: moment(),
         days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        showNavigation: false,
+        showSidepanel: false,
     }),
     computed: {
         year: function() {
@@ -561,4 +597,25 @@ body {
     }
 }
 
+    .changing_button {
+        border-radius: 20px;
+        margin-bottom: 10px;
+    }
+
+.page-container {
+    min-height: 300px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(#000, .12);
+  }
+
+   // Demo purposes only
+  .md-drawer {
+    width: 230px;
+    max-width: calc(100vw - 125px);
+  }
+
+  .md-content {
+    padding: 16px;
+  }
 </style>
