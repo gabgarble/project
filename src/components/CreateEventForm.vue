@@ -61,7 +61,7 @@ import { validationMixin } from 'vuelidate'
   } from 'vuelidate/lib/validators'
 
   export default {
-    name: 'FormValidation',
+    name: 'create-event-form',
     mixins: [validationMixin],
     data: () => ({
       form: {

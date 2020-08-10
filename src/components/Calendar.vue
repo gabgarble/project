@@ -1,221 +1,84 @@
 <template>
-  <div id="Calendar" class="align-to-center-form">
-    <b-container fluid>
-        <md-app md-mode="reveal">
-            <md-app-toolbar class="md-primary">
-                <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
-                <md-icon>menu</md-icon>
-                </md-button>
-                <span class="md-title">My Title</span>
-            </md-app-toolbar>
-
-            <md-app-drawer :md-active.sync="menuVisible">
-                <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
-
-                <md-list>
-                <md-list-item>
-                    <md-icon>move_to_inbox</md-icon>
-                    <span class="md-list-item-text">Inbox</span>
-                </md-list-item>
-
-                <md-list-item>
-                    <md-icon>send</md-icon>
-                    <span class="md-list-item-text">Sent Mail</span>
-                </md-list-item>
-
-                <md-list-item>
-                    <md-icon>delete</md-icon>
-                    <span class="md-list-item-text">Trash</span>
-                </md-list-item>
-
-                <md-list-item>
-                    <md-icon>error</md-icon>
-                    <span class="md-list-item-text">Spam</span>
-                </md-list-item>
-                </md-list>
-            </md-app-drawer>
-
-            <md-app-content>
-                <div class="b-calendar">
-                    <b-row>
-                        <b-col lg="4">
-                            <div class="b-calendar__information">
-                                <div class="today d-flex justify-content-center align-items-center">
-                                        <div class="weekDay">
-                                            {{selectedWeekDay | capitalize}}
-                                        </div>
-                                        <div class="day">
-                                            {{selectedDayAndMonth.day}}
-                                        </div>
-                                        <div class="month">
-                                            {{selectedDayAndMonth.month | capitalize}}
-                                        </div>
-                                    </div>
-                                <div class="b-event-container" v-if="windowWidth > 480">
-                                    <h4>Events:</h4>
-                                    <b-button-group size="sm">
-                                        <b-button variant="outline-light" :class="{'active': visibility === 'all'}"
-                                                @click="changeVisibility('all')">All
-                                        </b-button>
-                                        <b-button variant="outline-light" :class="{'active': visibility === 'completed'}"
-                                                @click="changeVisibility('completed')">Completed
-                                        </b-button>
-                                        <b-button variant="outline-light" :class="{'active': visibility === 'active'}"
-                                                @click="changeVisibility('active')">Active
-                                        </b-button>
-                                    </b-button-group>
-                                    <transition-group name="event-list" tag="ul" class="event-list"
-                                                    v-if="filteredEventListForSelectedDate.length > 0">
-                                        <li class="event" :class="{'completed': event.completed}"
-                                            v-for="event in filteredEventListForSelectedDate" :key="event.id">
-                                            <span class="title">{{event.title}}</span>
-                                            <div class="buttons">
-                                                <b-button class="completed-event-btn" :class="{'completed': event.completed}"
-                                                        @click="changeCompletedEvent(event)">
-                                                    <i class="fa" :class="event.completed ? 'fa-check-square' : 'fa-square-o'"
-                                                    aria-hidden="true"></i>
-                                                </b-button>
-                                                <b-button class="delete-event-btn" @click="deleteEvent(event)">
-                                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                                </b-button>
-                                            </div>
-                                        </li>
-                                    </transition-group>
-                                    <div class="no-events text-center" v-else>
-                                        Event list is empty...
-                                    </div>
+  <div id="calendar" class="align-to-center-form">
+    <b-container>
+            <main class="b-calendar">
+                <b-row>
+                    <b-col md="4">
+                        <div class="b-calendar__information">
+                            <div class="today d-flex justify-content-center align-items-center">
+                                <div class="weekDay">
+                                    {{selectedWeekDay | capitalize}}
                                 </div>
-                                <b-link href="#" class="go-today-link" @click="goToday" v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">
-                                    Go today
-                                </b-link>
+                                <div class="day">
+                                    {{selectedDayAndMonth.day}}
+                                </div>
+                                <div class="month">
+                                    {{selectedDayAndMonth.month | capitalize}}
+                                </div>
+                                <a href="#" id="goTodayLink" @click="goToday" v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">
+                                    Today
+                                </a>
+                                <b-tooltip target="goTodayLink" v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">
+                                    Back to today
+                                </b-tooltip>
                             </div>
-                        </b-col>
-                        <b-col lg="8">
-                            <div class="b-calendar__calendar">
-                                <div class="b-calendar__header">
-                                    <b-row>
-                                        <b-col class="year text-right" align-h="end">
-                                            <span>{{year}}</span>
-                                        </b-col>
-                                    </b-row>
-                                    <b-row align-v="center">
-                                        <b-col class="text-left" align-h="start">
-                                            <b-button id="goTodayBtn" class="go-today-btn" variant="outline-dark"
-                                                    @click="goToday"
-                                                    v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">
-                                                Today
-                                            </b-button>
-                                            <b-tooltip target="goTodayBtn"
-                                                    v-show="!todayInCurrentMonthAndYear || !todayIsEqualSelectDate">
-                                                Back to today
-                                            </b-tooltip>
-                                        </b-col>
-                                        <b-col class="text-center" align-h="center">
-
-                                        </b-col>
-                                        <b-col class="month-change-container text-right d-flex flex-row-reverse align-items-center"
-                                            align-h="end">
-                                            <b-button id="addMonthBtn" class="arrow arrow-right" variant="light"
-                                                    @click="addMonth">
-                                                <i class="fa fa-fw fa-chevron-right"></i>
-                                            </b-button>
-                                            <b-tooltip target="addMonthBtn">
-                                                {{nextMonthAsString | capitalize}}
-                                            </b-tooltip>
-                                            <div class="month text-center">{{month}}</div>
-                                            <b-button id="subtractMonthBtn" class="arrow arrow-left" variant="light"
-                                                    @click="subtractMonth">
-                                                <i class="fa fa-fw fa-chevron-left"></i>
-                                            </b-button>
-                                            <b-tooltip target="subtractMonthBtn">
-                                                {{previousMonthAsString | capitalize}}
-                                            </b-tooltip>
-                                        </b-col>
-                                    </b-row>
+                        </div>
+                    </b-col>
+                    <b-col md="8">
+                        <div class="b-calendar__calendar">
+                            <div class="b-calendar__header">
+                                <b-row>
+                                    <b-col class="year text-right" align-h="end">
+                                        <span>{{year}}</span>
+                                    </b-col>
+                                </b-row>
+                                <b-row align-v="center">
+                                    <b-col class="text-left" align-h="start">
+                                        <b-button id="subtractMonthBtn" class="arrow arrow-left" variant="light" @click="subtractMonth">
+                                            <i class="fa fa-fw fa-chevron-left"></i>
+                                        </b-button>
+                                        <b-tooltip target="subtractMonthBtn">
+                                            {{previousMonthAsString | capitalize}}
+                                        </b-tooltip>
+                                    </b-col>
+                                    <b-col class="text-center" align-h="center">
+                                        <span class="month">{{month}}</span>
+                                    </b-col>
+                                    <b-col class="text-right d-flex flex-row-reverse" align-h="end">
+                                        <b-button id="addMonthBtn" class="arrow arrow-right" variant="light" @click="addMonth">
+                                            <i class="fa fa-fw fa-chevron-right"></i>
+                                        </b-button>
+                                        <b-tooltip target="addMonthBtn">
+                                            {{nextMonthAsString | capitalize}}
+                                        </b-tooltip>
+                                    </b-col>
+                                </b-row>
+                            </div>
+                            <div class="b-calendar__weekdays">
+                                <div class="weekday" v-for="(day, index) in days" :key="index">
+                                    <strong>{{day}}</strong>
                                 </div>
-                                <div class="b-calendar__weekdays">
-                                    <div class="weekday" v-for="(day, index) in days" :key="index">
-                                        <strong>{{day}}</strong>
-                                    </div>
-                                </div>
-                                <div class="b-calendar__dates">
-                                    <div class="date text-right" :class="{
-                                            'selected': dateIsEqualSelectDate(date),
-                                            'today': date.today,
-                                            'blank': date.blank,
-                                            'no-border-right': date.key % 7 === 0
-                                        }"
-                                        v-for="date in dateList" :key="date.key" :data-date="date.date">
-                                        <a class="link" @click="setSelectedDate(date.moment)"></a>
-                                        <span class="day">{{date.dayNumber}}</span>
-                                        <span class="weekday">{{date.weekDay}}</span>
-                                        <div class="additional" v-show="date.additional">
-                                            <span class="year" v-show="date.additional.year">{{date.additional.year}}</span>
-                                            <span class="month" v-show="date.additional.month">{{date.additional.month}}</span>
-                                        </div>
-                                        <b-collapse :id="'collapseEvent' + date.key" 
-                                        class="b-event-container event-mobile-container"
-                                        :class="{'show': !collapseEventList}"
-                                        v-if="((windowWidth <= 480) && dateIsEqualSelectDate(date))">
-                                            <h4>Events:</h4>
-                                            <b-button-group size="sm">
-                                                <b-button variant="outline-light" :class="{'active': visibility === 'all'}"
-                                                        @click="changeVisibility('all')">All
-                                                </b-button>
-                                                <b-button variant="outline-light" :class="{'active': visibility === 'completed'}"
-                                                        @click="changeVisibility('completed')">Completed
-                                                </b-button>
-                                                <b-button variant="outline-light" :class="{'active': visibility === 'active'}"
-                                                        @click="changeVisibility('active')">Active
-                                                </b-button>
-                                            </b-button-group>
-                                            <transition-group name="event-list" tag="ul" class="event-list"
-                                                            v-if="filteredEventListForSelectedDate.length > 0">
-                                                <li class="event" :class="{'completed': event.completed}"
-                                                    v-for="event in filteredEventListForSelectedDate" :key="event.id">
-                                                    <span class="title">{{event.title}}</span>
-                                                    <div class="buttons">
-                                                        <b-button class="completed-event-btn"
-                                                                :class="{'completed': event.completed}"
-                                                                @click="changeCompletedEvent(event)">
-                                                            <i class="fa"
-                                                            :class="event.completed ? 'fa-check-square' : 'fa-square-o'"
-                                                            aria-hidden="true"></i>
-                                                        </b-button>
-                                                        <b-button class="delete-event-btn" @click="deleteEvent(event)">
-                                                            <i class="fa fa-trash" aria-hidden="true"></i>
-                                                        </b-button>
-                                                    </div>
-                                                </li>
-                                            </transition-group>
-                                            <div class="no-events text-center" v-else>
-                                                Event list is empty...
-                                            </div>
-                                        </b-collapse>
+                            </div>
+                            <div class="b-calendar__dates">
+                                <div class="date text-right" :class="{
+                                'today': date.today,
+                                'blank': date.blank,
+                                'no-border-right': date.key % 7 === 0,
+                             }"
+                                    v-for="date in dateList" :key="date.key" :data-date="date.date" @click="setSelectedDate(date.moment)">
+                                    <span class="day">{{date.dayNumber}}</span>
+                                    <span class="weekday">{{date.weekDay}}</span>
+                                    <div class="additional" v-show="date.additional">
+                                        <span class="year" v-show="date.additional.year">{{date.additional.year}}</span>
+                                        <span class="month" v-show="date.additional.month">{{date.additional.month}}</span>
                                     </div>
                                 </div>
                             </div>
-                        </b-col>
-                    </b-row>
-                </div>
-            </md-app-content>
-        </md-app>
-
-        
+                        </div>
+                    </b-col>
+                </b-row>
+            </main>
     </b-container>
-    <div>
-        <md-dialog :md-active.sync="showDialog">
-            <div class="changing-dialog-size md-dialog-container md-dialog-fullscreen md-theme-default">
-                <md-dialog-title>Add new event</md-dialog-title>
-                <md-dialog-content>
-                    <create-event-form v-on:create="createEvent" v-on:update="newEventForm.eventTitle = $event"></create-event-form>
-                </md-dialog-content>
-            </div>
-        </md-dialog>
-    </div>
-    <md-button class="md-fab md-primary md-fab-bottom-right md-fixed" @click="showDialogF()">
-        <md-icon>add</md-icon>
-    </md-button>
   </div>
 </template>
 
@@ -224,100 +87,36 @@
 
   import moment from 'moment'
 
-const STORAGE_KEY = "CEfSCfSM";
-const VISIBILITY_FOR_DATE = "forDate";
-const VISIBILITY_ALL = "all";
-const VISIBILITY_ACTIVE = "active";
-const VISIBILITY_COMPLETED = "completed";
-
-//for fetch and save events from local storage
-var eventStorage = {
-    fetch: function() {
-        var eventList = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-        eventList.forEach(function(event, index) {
-            event.id = index;
-        });
-        eventStorage.uid = eventList.length;
-        return eventList;
-    },
-    save: function(eventList) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(eventList));
-    }
-};
-
-//for get filtered events
-var filters = {
-    forDate: function(eventList, selectedDate) {
-        return eventList.filter(function(event) {
-            return event.date === selectedDate;
-        });
-    },
-    all: function(eventList) {
-        return eventList;
-    },
-    active: function(eventList) {
-        return eventList.filter(function(event) {
-            return !event.completed;
-        });
-    },
-    completed: function(eventList) {
-        return eventList.filter(function(event) {
-            return event.completed;
-        });
-    }
-};
-
-import createEventForm from '@/components/CreateEventForm'
-
-export default {
-    name: "Calendar",
+  export default {
+    name: 'Calendar',
     data: () => ({
-        //calendar
-        showDialog: false,
         today: moment(),
         dateContext: moment(),
         selectedDate: moment(),
         days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        menuVisible: false,
-        //events
-        newEventForm: {
-            eventTitle: ""
-        },
-        eventList: eventStorage.fetch(),
-        visibility: VISIBILITY_ALL,
-        windowWidth: window.outerWidth,
-        collapseEventList: true
     }),
-    watch: {
-        eventList: {
-            handler: function(eventList) {
-                eventStorage.save(eventList);
-            },
-            deep: true,
-            immediate: true
-        }
-    },
     computed: {
-        //calendar
         year: function() {
             return this.dateContext.format("Y");
         },
+
         month: function() {
             return this.dateContext.format("MMMM");
         },
+
         daysInMonth: function() {
             return this.dateContext.daysInMonth();
         },
+
         currentDate: function() {
             return this.dateContext.get("date");
         },
+
         firstDayOfMonth: function() {
-            let firstDay = moment(this.dateContext).subtract(
-                this.currentDate,
-                "days"
-            );
+            let firstDay = moment(this.dateContext).subtract(this.currentDate,"days");
             return firstDay.weekday();
         },
+
         previousMonth: function() {
             return moment(this.dateContext).subtract(1, "month");
         },
@@ -415,10 +214,7 @@ export default {
             });
 
             //filling in dates from the current month
-            while (
-                countDayInCurrentMonth <
-                this.firstDayOfMonth + this.daysInMonth
-            ) {
+            while (countDayInCurrentMonth < this.firstDayOfMonth + this.daysInMonth) {
                 countDayInCurrentMonth++;
 
                 let day = countDayInCurrentMonth - countDayInPreviousMonth;
@@ -436,7 +232,7 @@ export default {
                         formattedCurrentYear,
                     blank: false,
                     today:
-                        formattedDay === this.todayDate &&
+                        formattedDay === this.initialDate &&
                         this.todayInCurrentMonthAndYear,
                     additional: false,
                     weekDay: weekDay,
@@ -503,26 +299,23 @@ export default {
             });
         },
 
-        todayDate: function() {
+        initialDate: function() {
             return this.formattingDay(this.today.get("date"));
         },
-        todayMonth: function() {
+        initialMonth: function() {
             return this.today.format("MMMM");
         },
-        todayYear: function() {
+        initialYear: function() {
             return this.today.format("Y");
         },
-
-        //get selected day and month
         todayInCurrentMonthAndYear: function() {
             return (
-                this.month === this.todayMonth && this.year === this.todayYear
+                this.month === this.initialMonth &&
+                this.year === this.initialYear
             );
         },
-
-        //get selected day and month
         selectedDayAndMonth: function() {
-            let dayAndMonth = this.selectedDate.format("DD MMMM");
+            let dayAndMonth = this.selectedDate.format("D MMMM");
             dayAndMonth = dayAndMonth.split(" ");
             dayAndMonth = {
                 day: dayAndMonth[0],
@@ -531,133 +324,40 @@ export default {
 
             return dayAndMonth;
         },
-
-        //get selected weekday
         selectedWeekDay: function() {
             return this.selectedDate.format("dddd");
         },
-
-        //comparison today with selectedDate
         todayIsEqualSelectDate: function() {
             return (
                 this.selectedDate.format("YYYYMMDD") ===
                 this.today.format("YYYYMMDD")
             );
-        },
-
-        //events
-        /**
-         *  get list events for selected in calendar date
-         */
-        eventListForSelectedDate: function() {
-            return filters[VISIBILITY_FOR_DATE](
-                this.eventList,
-                this.selectedDate.format("DD.MM.YYYY")
-            );
-        },
-
-        /**
-         *  get filtered list events for selected in calendar date and completed filter
-         */
-        filteredEventListForSelectedDate: function() {
-            return filters[this.visibility](this.eventListForSelectedDate);
         }
     },
     methods: {
-        //calendar
-
-        //changing date list
         addMonth: function() {
             this.dateContext = this.nextMonth;
         },
         subtractMonth: function() {
             this.dateContext = this.previousMonth;
         },
-
-        //changing selected date
         setSelectedDate: function(moment) {
-            if (
-                this.selectedDate.format("YYYYMMDD") !==
-                moment.format("YYYYMMDD")
-            ) {
-                this.selectedDate = moment;
-                this.collapseEventList = false;
-            } else {
-                this.collapseEventList = !this.collapseEventList;
-            }
+            this.selectedDate = moment;
         },
-
-        //set selected date as today
         goToday: function() {
             this.selectedDate = this.today;
             this.dateContext = this.today;
         },
-
-        //add 0 before [1..9] numbers in day
-        formattingDay: function(day) {
+        formattingDay(day) {
             return ("0" + day).slice(-2);
         },
-
-        //get weekday from data Weekdays
-        getWeekDay: function(day) {
+        getWeekDay(day) {
             let index = day;
             if (index > 7) {
                 index %= 7;
             }
             index = index === 0 ? 6 : index - 1;
             return this.days[index];
-        },
-
-        //selected date compare with date
-        dateIsEqualSelectDate: function(date) {
-            return (
-                this.selectedDate.format("YYYYMMDD") ===
-                date.moment.format("YYYYMMDD")
-            );
-        },
-
-        //events
-
-        //disable form submitting
-        onSubmit: function(event) {
-            event.preventDefault();
-        },
-        //adding event
-        createEvent: function() {
-            let eventTitle =
-                this.newEventForm.eventTitle &&
-                this.newEventForm.eventTitle.trim();
-            if (!eventTitle) {
-                return;
-            }
-            this.eventList.push({
-                id: eventStorage.uid++,
-                title: eventTitle,
-                completed: false,
-                date: this.selectedDate.format("DD.MM.YYYY")
-            });
-            this.newEventForm.eventTitle = "";
-        },
-
-        changeCompletedEvent: function(event) {
-            event.completed = !event.completed;
-        },
-
-        deleteEvent: function(event) {
-            let index = this.eventList.indexOf(event);
-            this.eventList.splice(index, 1);
-        },
-
-        changeVisibility: function(visibility) {
-            if (filters[visibility]) {
-                this.visibility = visibility;
-            } else {
-                this.visibility = VISIBILITY_ALL;
-            }
-        },
-        showDialogF: function(){
-            if(this.showDialog === true) this.showDialog = false
-            else this.showDialog = true
         }
     },
     filters: {
@@ -666,27 +366,12 @@ export default {
             value = value.toString();
             return value.charAt(0).toUpperCase() + value.slice(1);
         }
-    },
-    mounted() {
-        this.$nextTick(() => {
-            window.addEventListener("resize", () => {
-                this.windowWidth = window.innerWidth;
-            });
-        });
-    },
-    components: {
-        'create-event-form': createEventForm
     }
-};
-
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
-    .md-dialog /deep/.md-dialog-container {
-        max-width: 768px;
-    }
 
   .align-to-center{
     float: none;
@@ -715,44 +400,11 @@ body {
 .b-calendar {
     display: flex;
     align-items: center;
-    margin: 2.5em auto;
-    max-width: 70rem;
+    margin: 2.5em 0;
     &__information {
-        background-color: #535c68;
+        background-color: rgba(0, 123, 255, 0.2);
         border-radius: 1.2rem 0 0 1.2rem;
-        color: #fff;
         height: 100%;
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
-        .selected-date {
-            padding-top: 3rem;
-            padding-left: 2.5rem;
-            position: relative;
-            &:before {
-                content: "";
-                position: absolute;
-                background-color: #f0932b;
-                border-radius: 50%;
-                width: 2rem;
-                height: 2rem;
-                top: 4.5rem;
-                left: -0.25rem;
-            }
-            .weekday {
-                font-weight: 100;
-                padding-bottom: 0.5em;
-            }
-            .day {
-                font-size: 2em;
-                font-weight: 600;
-                line-height: 1;
-            }
-            .month {
-                font-size: 2em;
-                font-weight: 200;
-                line-height: 1;
-            }
-        }
         .today {
             flex-direction: column;
             padding-top: 3em;
@@ -772,13 +424,9 @@ body {
                 line-height: 1;
             }
         }
-        .go-today-link {
-            display: none;
-        }
     }
     &__calendar {
         min-height: 40rem;
-        padding-right: 0.9rem;
     }
     &__header {
         margin-bottom: 2rem;
@@ -786,7 +434,6 @@ body {
             font-size: 1.25em;
             font-weight: 200;
             text-transform: capitalize;
-            min-width: 10rem;
         }
         .year {
             font-size: 1.5em;
@@ -855,21 +502,7 @@ body {
                 border-right: none;
             }
             &.today {
-                background-color: #ff7979;
-                color: #fff;
-            }
-            &.selected {
-                background-color: #f0932b;
-                color: #fff;
-            }
-            .link {
-                cursor: pointer;
-                position: absolute;
-                top: 0.05rem;
-                left: 0.05rem;
-                bottom: 0.05rem;
-                right: 0.05rem;
-                z-index: 1;
+                background-color: rgba(0, 123, 255, 0.2);
             }
             .weekday {
                 display: none;
@@ -884,108 +517,22 @@ body {
                     font-size: 0.75em;
                 }
             }
-            .event-mobile-container {
-                display: none;
-            }
         }
     }
 }
 
-.b-event-container {
-    margin-top: 2rem;
-    .create-event-form {
-        margin-bottom: 1rem;
-        .event-title-input {
-            margin-right: 0.25rem;
-            width: calc(100% - 2.7rem);
-        }
-    }
-    .btn-group {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin-bottom: 1rem;
-        .btn {
-            width: 33.33%;
-        }
-    }
-    .event-list {
-        list-style: none;
-        padding: 0;
-        margin-left: -0.9rem;
-        margin-right: -0.9rem;
-        max-height: 20rem;
-        overflow-y: auto;
-        .event {
-            background-color: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 0.9rem;
-            margin-bottom: 0.5rem;
-            &.completed {
-                background-color: rgba(255, 255, 255, 0.2);
-                .title {
-                    opacity: 0.5;
-                    &:before {
-                        content: "";
-                        position: absolute;
-                        top: 50%;
-                        left: -0.5rem;
-                        display: block;
-                        width: 0%;
-                        height: 1px;
-                        background: #fff;
-                        animation: strikeitem 0.3s ease-out 0s forwards;
-                    }
-                }
-            }
-            .title {
-                position: relative;
-                max-width: calc(100% - 4rem);
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            .buttons {
-                display: flex;
-                .btn {
-                    background: transparent;
-                    border: none;
-                    color: #fff;
-                    font-size: 1.2em;
-                    padding: 0;
-                    height: 1.75rem;
-                    width: 1.75rem;
-                    box-shadow: none;
-                }
-            }
-        }
-    }
-    .no-events {
-        margin-top: 1.5rem;
-    }
+.b-footer {
+    padding: 15px 0;
 }
 
-@keyframes strikeitem {
-    to {
-        width: calc(100% + 1rem);
-    }
-}
-
-@media (max-width: 991.98px) {
-    .b-calendar {
-        &__calendar {
-            padding: 0;
-        }
-        &__information {
-            border-radius: 2rem 2rem 0 0;
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-            min-height: auto;
-            .today {
-                padding-top: 0;
-            }
+@media (max-width: 768px) {
+    .b-calendar__information {
+        min-height: auto;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        border-radius: 2.5rem 2.5rem 0 0;
+        .today {
+            padding-top: 0;
         }
     }
 }
@@ -994,35 +541,6 @@ body {
     .b-calendar {
         &__weekdays {
             display: none;
-        }
-        &__information {
-            .selected-date {
-                padding-top: 2rem;
-                padding-bottom: 1rem;
-                padding-left: 2.5rem;
-                &:before {
-                    top: 3rem;
-                }
-            }
-            .b-event-container {
-                display: none;
-            }
-            .go-today-link {
-                display: block;
-                color: #fff;
-            }
-        }
-        &__header {
-            .go-today-btn {
-                display: none;
-            }
-            .month-change-container {
-                width: 100%;
-                min-width: 100%;
-            }
-            .month {
-                width: 100%;
-            }
         }
         &__dates {
             .date {
@@ -1037,23 +555,6 @@ body {
                 .weekday {
                     display: block;
                     margin-left: 0.25rem;
-                }
-                .event-mobile-container {
-                    background: #535c68;
-                    display: block;
-                    position: absolute;
-                    margin-top: 0;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    padding: 2rem 0.5rem;
-                    z-index: 10;
-                    &.collapse {
-                        display: none !important;
-                    }
-                    &.show {
-                        display: block !important;
-                    }
                 }
             }
         }
