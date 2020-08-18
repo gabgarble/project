@@ -120,9 +120,10 @@
                   </div>
                 </div>
               </div>
-              <md-button class="md-fab md-primary md-fab-bottom-right">
+              <md-button class="md-fab md-primary md-fab-bottom-right" @click="openCreateEventForm">
                 <md-icon>add</md-icon>
               </md-button>
+              <create-event-form ref="eventForm" />
             </div>
           </b-col>
         </b-row>
@@ -134,6 +135,7 @@
 <!-- Script -->
 <script>
 import moment from "moment";
+import CreateEventForm from "@/components/CreateEventForm";
 
 export default {
   name: "Calendar",
@@ -402,6 +404,9 @@ export default {
         this.selectedDate.format("YYYYMMDD") === date.moment.format("YYYYMMDD")
       );
     },
+    openCreateEventForm() {
+      this.$refs.eventForm.fShowDialog();
+    },
   },
   filters: {
     capitalize: function (value) {
@@ -409,6 +414,9 @@ export default {
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
+  },
+  components: {
+    CreateEventForm,
   },
 };
 </script>
