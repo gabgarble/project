@@ -14,12 +14,12 @@
         </md-toolbar>
 
         <md-list>
-          <md-list-item>
+          <md-list-item @click="openPopUpViews('import')">
             <md-icon>get_app</md-icon>
             <span class="md-list-item-text">Import calendar</span>
           </md-list-item>
 
-          <md-list-item>
+          <md-list-item @click="openPopUpViews('add')">
             <md-icon>person_add</md-icon>
             <span class="md-list-item-text">Add users</span>
           </md-list-item>
@@ -29,7 +29,7 @@
             <span class="md-list-item-text">Change view</span>
           </md-list-item>
 
-          <md-list-item>
+          <md-list-item @click="openPopUpViews('settings')">
             <md-icon>settings</md-icon>
             <span class="md-list-item-text">Settings</span>
           </md-list-item>
@@ -120,10 +120,13 @@
                   </div>
                 </div>
               </div>
-              <md-button class="md-fab md-primary md-fab-bottom-right" @click="openCreateEventForm">
+              <md-button class="md-fab md-primary md-fab-bottom-right" @click="openPopUpViews('create')">
                 <md-icon>add</md-icon>
               </md-button>
               <create-event-form ref="eventForm" />
+              <add-users-form ref="addUsersForm" />
+              <import-calendar-form ref="importCalendarForm" />
+              <settings ref="settings" />
             </div>
           </b-col>
         </b-row>
@@ -136,6 +139,9 @@
 <script>
 import moment from "moment";
 import CreateEventForm from "@/components/CreateEventForm";
+import AddUsersForm from "@/components/AddUsersForm";
+import ImportCalendarForm from "@/components/ImportCalendarForm";
+import Settings from "@/components/Settings";
 
 export default {
   name: "Calendar",
@@ -404,8 +410,29 @@ export default {
         this.selectedDate.format("YYYYMMDD") === date.moment.format("YYYYMMDD")
       );
     },
-    openCreateEventForm() {
-      this.$refs.eventForm.fShowDialog();
+    //functions to open and close the pop up views
+    openPopUpViews: function(view){
+      if(view === "create"){
+        this.$refs.eventForm.fShowDialog(true),
+        this.$refs.addUsersForm.fShowDialog(false),
+        this.$refs.importCalendarForm.fShowDialog(false),
+        this.$refs.settings.fShowDialog(false)
+      } else if(view === "add"){
+        this.$refs.eventForm.fShowDialog(false),
+        this.$refs.addUsersForm.fShowDialog(true),
+        this.$refs.importCalendarForm.fShowDialog(false),
+        this.$refs.settings.fShowDialog(false)
+      } else if(view === "import"){
+        this.$refs.eventForm.fShowDialog(false),
+        this.$refs.addUsersForm.fShowDialog(false),
+        this.$refs.importCalendarForm.fShowDialog(true),
+        this.$refs.settings.fShowDialog(false)
+      } else if (view === "settings"){
+        this.$refs.eventForm.fShowDialog(false),
+        this.$refs.addUsersForm.fShowDialog(false),
+        this.$refs.importCalendarForm.fShowDialog(false),
+        this.$refs.settings.fShowDialog(true)
+      }
     },
   },
   filters: {
@@ -417,6 +444,9 @@ export default {
   },
   components: {
     CreateEventForm,
+    AddUsersForm,
+    ImportCalendarForm,
+    Settings,
   },
 };
 </script>

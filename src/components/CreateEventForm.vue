@@ -2,101 +2,103 @@
   <div>
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
-        <md-dialog-title>Preferences</md-dialog-title>
-
-        <md-tabs md-dynamic-height>
-          <md-tab md-label="General">
-            <form
-              novalidate
-              class="md-layout align-to-center fix-form-to-screen"
-              @submit.prevent="validateUser"
-            />
-            <md-card class="md-layout-item md-size-50 md-small-size-100 fix-form-to-screen">
-              <md-card-content>
-                <div class="md-layout md-gutter">
-                  <div class="md-layout-item md-small-size-100">
-                    <md-field :class="getValidationClass('eventTitle')">
-                      <label for="event-title">Event title...</label>
-                      <md-input
-                        name="event-title"
-                        id="event-title"
-                        autocomplete="given-name"
-                        v-model="form.eventTitle"
-                        :disabled="sending"
-                      />
-                      <span
-                        class="md-error"
-                        v-if="!$v.form.eventTitle.required"
-                      >The first name is required</span>
-                      <span
-                        class="md-error"
-                        v-else-if="!$v.form.eventTitle.minlength"
-                      >Invalid event title name</span>
-                    </md-field>
-                  </div>
+        <md-dialog-title>Add new event</md-dialog-title>
+        <p></p>
+        <form
+          novalidate
+          class="md-layout align-to-center fix-form-to-screen"
+          @submit.prevent="validateUser"
+        >
+          <md-card class="md-layout-item md-size-50 md-small-size-100 fix-form-to-screen">
+            <md-card-content>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field :class="getValidationClass('eventTitle')">
+                    <label for="event-title">Event title...</label>
+                    <md-input
+                      name="event-title"
+                      id="event-title"
+                      autocomplete="given-name"
+                      v-model="form.eventTitle"
+                      :disabled="sending"
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.eventTitle.required"
+                    >The first name is required</span>
+                    <span
+                      class="md-error"
+                      v-else-if="!$v.form.eventTitle.minlength"
+                    >Invalid event title name</span>
+                  </md-field>
                 </div>
+              </div>
 
-                <div class="md-layout md-gutter">
-                  <div class="md-layout-item md-small-size-100">
-                    <md-field>
-                      <label for="textarea">Description...</label>
-                      <md-textarea name="textarea" v-model="form.textarea"></md-textarea>
-                    </md-field>
-                  </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field>
+                    <label for="textarea">Description...</label>
+                    <md-textarea name="textarea" v-model="form.textarea"></md-textarea>
+                  </md-field>
                 </div>
+              </div>
 
-                <div class="md-layout md-gutter">
-                  <div class="md-layout-item md-small-size-100">
-                    <md-datepicker
-                      :class="getValidationClass('date')"
-                      v-model="form.date"
-                      id="date"
-                      name="date"
-                    >
-                      <label>Select date of event</label>
-                      <span class="md-error" v-if="!$v.form.date.required">The date is required</span>
-                    </md-datepicker>
-                  </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-datepicker
+                    :class="getValidationClass('date')"
+                    v-model="form.date"
+                    id="date"
+                    name="date"
+                  >
+                    <label>Select date of event</label>
+                    <span class="md-error" v-if="!$v.form.date.required">The date is required</span>
+                  </md-datepicker>
                 </div>
+              </div>
 
-                <div class="inline">
-                  <md-radio
-                    :class="getValidationClass('radio')"
-                    v-model="form.radio"
-                    value="weekly"
-                  >Weekly</md-radio>
-                  <md-radio
-                    :class="getValidationClass('radio')"
-                    v-model="form.radio"
-                    value="monthly"
-                  >Monthly</md-radio>
-                  <md-radio
-                    :class="getValidationClass('radio')"
-                    v-model="form.radio"
-                    value="anually"
-                  >Annually</md-radio>
-                  <md-radio
-                    :class="getValidationClass('radio')"
-                    v-model="form.radio"
-                    value="daily"
-                  >Daily</md-radio>
-                  <md-radio
-                    :class="getValidationClass('radio')"
-                    v-model="form.radio"
-                    value="none"
-                  >None</md-radio>
-                </div>
-              </md-card-content>
-            </md-card>
-          </md-tab>
-        </md-tabs>
+              <div class="inline">
+                <md-radio
+                  :class="getValidationClass('radio')"
+                  v-model="form.radio"
+                  value="weekly"
+                >Weekly</md-radio>
+                <md-radio
+                  :class="getValidationClass('radio')"
+                  v-model="form.radio"
+                  value="monthly"
+                >Monthly</md-radio>
+                <md-radio
+                  :class="getValidationClass('radio')"
+                  v-model="form.radio"
+                  value="anually"
+                >Annually</md-radio>
+                <md-radio
+                  :class="getValidationClass('radio')"
+                  v-model="form.radio"
+                  value="daily"
+                >Daily</md-radio>
+                <md-radio
+                  :class="getValidationClass('radio')"
+                  v-model="form.radio"
+                  value="none"
+                >None</md-radio>
+              </div>
+            </md-card-content>
+          </md-card>
 
-        <md-dialog-actions>
-          <md-button class="md-primary" @click="showDialog = false">Close</md-button>
-          <md-button type="submit" class="md-primary" :disabled="sending" @click="showDialog = false">Save</md-button>
-        </md-dialog-actions>
-        <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
-        
+          <md-dialog-actions>
+            <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+            <md-button
+              type="submit"
+              class="md-primary"
+              :disabled="sending"
+              @click="showDialog = false"
+            >Save</md-button>
+          </md-dialog-actions>
+          <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
+          
+        </form>
       </md-dialog-content>
     </md-dialog>
   </div>
@@ -165,8 +167,8 @@ export default {
         this.saveUser();
       }
     },
-    fShowDialog() {
-      this.showDialog = true;
+    fShowDialog: function(visible) {
+      this.showDialog = visible
     },
   },
 };
