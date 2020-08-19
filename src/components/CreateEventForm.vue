@@ -2,7 +2,7 @@
   <div>
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
-        <md-dialog-title>Add new event</md-dialog-title>
+        <md-dialog-title>Add New Event</md-dialog-title>
         <p></p>
         <form
           novalidate

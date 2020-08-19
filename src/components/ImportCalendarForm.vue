@@ -2,13 +2,36 @@
   <div>
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
-        <md-dialog-title>Preferences</md-dialog-title>
+        <md-dialog-title>Import Calendar</md-dialog-title>
 
-        <md-tabs md-dynamic-height>
-          <md-tab md-label="General">
-            <h1>Wololo...!!!</h1>
-          </md-tab>
-        </md-tabs>
+        <md-field>
+          <label>Calendar name</label>
+          <md-input v-model="regular" md-counter="15"></md-input>
+        </md-field>
+
+        <md-field>
+          <label>Select a calendar</label>
+          <md-file v-model="single" />
+        </md-field>
+
+        <md-list>
+          <md-list-item @click="showDialog = false">
+            Calendar imported 1
+            <md-icon>delete_outline</md-icon>
+          </md-list-item>
+          <md-list-item>
+            Calendar imported 2
+            <md-icon>delete_outline</md-icon>
+          </md-list-item>
+          <md-list-item>
+            Calendar imported 3
+            <md-icon>delete_outline</md-icon>
+          </md-list-item>
+          <md-list-item>
+            Calendar imported 4
+            <md-icon>delete_outline</md-icon>
+          </md-list-item>
+        </md-list>
 
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDialog = false">Close</md-button>
@@ -29,13 +52,15 @@
 export default {
   name: "import-calendar-form",
   data: () => ({
-      sending: false,
-      showDialog: false,
+    sending: false,
+    showDialog: false,
+    single: null,
+    regular: null,
   }),
   validations: {},
   methods: {
-    fShowDialog: function(visible) {
-      this.showDialog = visible
+    fShowDialog: function (visible) {
+      this.showDialog = visible;
     },
   },
 };

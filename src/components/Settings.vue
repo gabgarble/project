@@ -2,13 +2,9 @@
   <div>
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
-        <md-dialog-title>Preferences</md-dialog-title>
+        <md-dialog-title>Settings</md-dialog-title>
 
-        <md-tabs md-dynamic-height>
-          <md-tab md-label="General">
-            <h1>Wololo...!!!</h1>
-          </md-tab>
-        </md-tabs>
+        <h1>Wololo...!!!</h1>
 
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDialog = false">Close</md-button>
@@ -29,13 +25,13 @@
 export default {
   name: "settings",
   data: () => ({
-      sending: false,
-      showDialog: false,
+    sending: false,
+    showDialog: false,
   }),
   validations: {},
   methods: {
-    fShowDialog: function(visible) {
-      this.showDialog = visible
+    fShowDialog: function (visible) {
+      this.showDialog = visible;
     },
   },
 };

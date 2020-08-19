@@ -2,10 +2,14 @@
   <div>
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
-        <md-dialog-title>Preferences</md-dialog-title>
+        <md-dialog-title>Add Users</md-dialog-title>
 
         <md-tabs md-dynamic-height>
-          <md-tab md-label="General">
+          <md-tab md-label="Add new users">
+            <h1>Wololo...!!!</h1>
+          </md-tab>
+
+          <md-tab md-label="Petitions">
             <h1>Wololo...!!!</h1>
           </md-tab>
         </md-tabs>
