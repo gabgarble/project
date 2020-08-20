@@ -105,7 +105,6 @@
     </form>
   </div>
 </template>
-</template>
 
 <!-- Script -->
 <script>
