@@ -3,45 +3,57 @@
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
         <md-dialog-title>Import Calendar</md-dialog-title>
+        <p></p>
+        <form
+          id="cimportCalendar"
+          novalidate
+          class="md-layout"
+          @submit.prevent="validateUser"
+          action
+          method="post"
+        >
+          <md-card class="md-layout-item md-size-50 md-small-size-100 fix-form-to-screen">
+            <md-card-content>
+              <md-field>
+                <label>Calendar name</label>
+                <md-input v-model="regular" md-counter="15"></md-input>
+              </md-field>
 
-        <md-field>
-          <label>Calendar name</label>
-          <md-input v-model="regular" md-counter="15"></md-input>
-        </md-field>
+              <md-field>
+                <label>Select a calendar</label>
+                <md-file v-model="single" />
+              </md-field>
 
-        <md-field>
-          <label>Select a calendar</label>
-          <md-file v-model="single" />
-        </md-field>
-
-        <md-list>
-          <md-list-item @click="showDialog = false">
-            Calendar imported 1
-            <md-icon>delete_outline</md-icon>
-          </md-list-item>
-          <md-list-item>
-            Calendar imported 2
-            <md-icon>delete_outline</md-icon>
-          </md-list-item>
-          <md-list-item>
-            Calendar imported 3
-            <md-icon>delete_outline</md-icon>
-          </md-list-item>
-          <md-list-item>
-            Calendar imported 4
-            <md-icon>delete_outline</md-icon>
-          </md-list-item>
-        </md-list>
-
-        <md-dialog-actions>
-          <md-button class="md-primary" @click="showDialog = false">Close</md-button>
-          <md-button
-            type="submit"
-            class="md-primary"
-            :disabled="sending"
-            @click="showDialog = false"
-          >Save</md-button>
-        </md-dialog-actions>
+              <md-list>
+                <md-list-item @click="showDialog = false">
+                  Calendar imported 1
+                  <md-icon>delete_outline</md-icon>
+                </md-list-item>
+                <md-list-item>
+                  Calendar imported 2
+                  <md-icon>delete_outline</md-icon>
+                </md-list-item>
+                <md-list-item>
+                  Calendar imported 3
+                  <md-icon>delete_outline</md-icon>
+                </md-list-item>
+                <md-list-item>
+                  Calendar imported 4
+                  <md-icon>delete_outline</md-icon>
+                </md-list-item>
+              </md-list>
+            </md-card-content>
+          </md-card>
+          <md-dialog-actions>
+            <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+            <md-button
+              type="submit"
+              class="md-primary"
+              :disabled="sending"
+              @click="showDialog = false"
+            >Save</md-button>
+          </md-dialog-actions>
+        </form>
       </md-dialog-content>
     </md-dialog>
   </div>

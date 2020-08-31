@@ -10,7 +10,52 @@
           </md-tab>
 
           <md-tab md-label="Petitions">
-            <h1>Wololo...!!!</h1>
+            <md-list>
+              <md-list-item>
+                User name
+                <div>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>done_outline</md-icon>
+                  </md-button>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>delete_outline</md-icon>
+                  </md-button>
+                </div>
+              </md-list-item>
+              <md-list-item>
+                User name
+                <div>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>done_outline</md-icon>
+                  </md-button>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>delete_outline</md-icon>
+                  </md-button>
+                </div>
+              </md-list-item>
+              <md-list-item>
+                User name
+                <div>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>done_outline</md-icon>
+                  </md-button>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>delete_outline</md-icon>
+                  </md-button>
+                </div>
+              </md-list-item>
+              <md-list-item>
+                User name
+                <div>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>done_outline</md-icon>
+                  </md-button>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>delete_outline</md-icon>
+                  </md-button>
+                </div>
+              </md-list-item>
+            </md-list>
           </md-tab>
         </md-tabs>
 
@@ -33,15 +78,13 @@
 export default {
   name: "add-users-form",
   data: () => ({
-      sending: false,
-      showDialog: false,
+    sending: false,
+    showDialog: false,
   }),
-  validations: {
-
-  },
+  validations: {},
   methods: {
-    fShowDialog: function(visible) {
-      this.showDialog = visible
+    fShowDialog: function (visible) {
+      this.showDialog = visible;
     },
   },
 };

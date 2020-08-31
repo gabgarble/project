@@ -1,13 +1,13 @@
 <template>
-  <div id="UserRegister">
+  <div id="UserSettings">
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
-        <md-dialog-title>Add New Event</md-dialog-title>
+        <md-dialog-title>Settings</md-dialog-title>
         <p></p>
         <form
-          id="userRegisterForm"
+          id="userSettingsForm"
           novalidate
-          class="md-layout align-to-center"
+          class="md-layout"
           @submit.prevent="validateUser"
           action
           method="post"
@@ -146,19 +146,15 @@
               </div>
             </md-card-content>
           </md-card>
-        </form>
+        
 
         <md-dialog-actions>
-          <md-button class="md-primary" @click="showDialog = false">Close</md-button>
-          <md-button class="md-primary" @click="condition = false">Edit</md-button>
-          <md-button
-            type="submit"
-            class="md-primary"
-            :disabled="sending"
-          >Save</md-button>
+            <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+            <md-button class="md-primary" @click="condition = false">Edit</md-button>
+            <md-button type="submit" class="md-primary" :disabled="sending">Save</md-button>
         </md-dialog-actions>
         <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
-
+        </form>
       </md-dialog-content>
     </md-dialog>
   </div>
