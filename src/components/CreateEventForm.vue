@@ -5,9 +5,12 @@
         <md-dialog-title>Add New Event</md-dialog-title>
         <p></p>
         <form
+          id="createEvent"
           novalidate
           class="md-layout align-to-center fix-form-to-screen"
           @submit.prevent="validateUser"
+          action
+          method="post"
         >
           <md-card class="md-layout-item md-size-50 md-small-size-100 fix-form-to-screen">
             <md-card-content>
@@ -86,19 +89,18 @@
               </div>
             </md-card-content>
           </md-card>
-
-          <md-dialog-actions>
-            <md-button class="md-primary" @click="showDialog = false">Close</md-button>
-            <md-button
-              type="submit"
-              class="md-primary"
-              :disabled="sending"
-              @click="showDialog = false"
-            >Save</md-button>
-          </md-dialog-actions>
-          <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
-          
         </form>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+          <md-button
+            type="submit"
+            class="md-primary"
+            :disabled="sending"
+          >Save</md-button>
+        </md-dialog-actions>
+        <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
+        
       </md-dialog-content>
     </md-dialog>
   </div>
@@ -167,8 +169,8 @@ export default {
         this.saveUser();
       }
     },
-    fShowDialog: function(visible) {
-      this.showDialog = visible
+    fShowDialog: function (visible) {
+      this.showDialog = visible;
     },
   },
 };
